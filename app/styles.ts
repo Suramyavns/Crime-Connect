@@ -1,0 +1,69 @@
+
+import { StyleSheet } from "react-native"
+
+const color = {
+    'bg':'#ddd172',
+    'fontdark':'#272727',
+    'fontlight':'#efefef',
+    'blue':'#232834',
+    'black':'#191919'
+}
+
+export const styles = StyleSheet.create({
+    container:{
+        padding:1,
+        flex:1,
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:color.bg
+    },
+    form:{
+        minWidth:'75%',
+        margin:12,
+        padding:10,
+        flex:1,
+        justifyContent:'flex-start',
+        alignItems:'flex-start',
+        flexDirection:'column',
+        gap:16,
+    },
+    textLight:{
+        textAlign:'center',
+        color:color.fontlight,
+    },
+    textDark:{
+        textAlign:'center',
+        color:color.fontdark,
+    },
+    blue:{
+        backgroundColor:color.blue
+    },
+    black:{
+        backgroundColor:color.black
+    },
+    light:{
+        borderColor:color.black,
+        borderWidth:2,
+        borderStyle:'solid'
+    },
+    btn:{
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        gap:6,
+        maxHeight:48,
+        margin:4,
+        minWidth:'75%',
+        paddingHorizontal:12,
+        height:'auto',
+        borderRadius:12,
+        paddingVertical:8,
+    },
+    textInput:{
+        borderRadius:12,
+        paddingHorizontal:12,
+        minWidth:'85%'
+    }
+})
