@@ -1,6 +1,20 @@
-import { Image,Text, View, Pressable } from "react-native"
+import { Image,Text, View, Pressable, StyleSheet } from "react-native"
 import { styles } from "./styles"
+import { JockeyOne_400Regular, useFonts } from "@expo-google-fonts/jockey-one"
+
+const fontStyle = StyleSheet.create({
+    jockeyOne:{
+        fontFamily:'JockeyOne_400Regular'
+    }
+})
+
 export default function Index(){
+    const [fontsLoaded]=useFonts({
+        JockeyOne_400Regular
+    })
+    if(!fontsLoaded){
+        return undefined
+    }
     return(
         <View style={styles.container}>
             <Image style={{
@@ -12,24 +26,18 @@ export default function Index(){
                 justifyContent:'flex-start',
                 alignItems:'center'
             }}>
-                <Text style={[styles.textDark,{
-                    fontSize:32,
-                    fontWeight:'bold',
-                    fontFamily:'JockeyOne-Regular'
+                <Text style={[styles.textDark,fontStyle.jockeyOne,{
+                    fontSize:48,
                 }]}>
                     Welcome to
                 </Text>
-                <Text style={[styles.textDark,{
-                    fontSize:64,
-                    fontWeight:'bold',
-                    fontFamily:'JockeyOne-Regular'
+                <Text style={[styles.textDark,fontStyle.jockeyOne,{
+                    fontSize:84,
                 }]}>
                     CrimeConnect
                 </Text>
-                <Text style={[styles.textDark,{
-                    fontSize:20,
-                    fontWeight:'bold',
-                    fontFamily:'JockeyOne-Regular'
+                <Text style={[styles.textDark,fontStyle.jockeyOne,{
+                    fontSize:28,
                 }]}>
                     Become responsible with your powers
                 </Text>
@@ -43,9 +51,8 @@ export default function Index(){
                 alignItems:'center',
                 margin:10
             },styles.blue]}>
-                <Text style={[styles.textLight,{
+                <Text style={[styles.textLight,fontStyle.jockeyOne,{
                     fontSize:32,
-                    fontFamily:'JockeyOne-Regular'
                 }]}>Save your city</Text>
             </Pressable>
         </View>
