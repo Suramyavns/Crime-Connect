@@ -1,12 +1,8 @@
 import { Image,Text, View, Pressable, StyleSheet } from "react-native"
-import { styles } from "./styles"
+import { styles,fontStyle } from "./styles"
 import { JockeyOne_400Regular, useFonts } from "@expo-google-fonts/jockey-one"
-
-const fontStyle = StyleSheet.create({
-    jockeyOne:{
-        fontFamily:'JockeyOne_400Regular'
-    }
-})
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { Link } from "expo-router"
 
 export default function Index(){
     const [fontsLoaded]=useFonts({
@@ -16,45 +12,46 @@ export default function Index(){
         return undefined
     }
     return(
-        <View style={styles.container}>
-            <Image style={{
-                height:'60%'
-            }} resizeMode="cover" source={require('../assets/images/supers.png')}/>
-            <View style={{
-                flex:1,
-                flexDirection:'column',
-                justifyContent:'flex-start',
-                alignItems:'center'
-            }}>
-                <Text style={[styles.textDark,fontStyle.jockeyOne,{
-                    fontSize:48,
-                }]}>
-                    Welcome to
-                </Text>
-                <Text style={[styles.textDark,fontStyle.jockeyOne,{
-                    fontSize:84,
-                }]}>
-                    CrimeConnect
-                </Text>
-                <Text style={[styles.textDark,fontStyle.jockeyOne,{
-                    fontSize:28,
-                }]}>
-                    Become responsible with your powers
-                </Text>
+        <SafeAreaProvider>
+            <View style={styles.main}>
+                <Image style={{
+                    height:'60%'
+                }} source={require('../assets/images/batman.png')}/>
+                <View style={{
+                    flex:1,
+                    flexDirection:'column',
+                    justifyContent:'flex-start',
+                    alignItems:'center'
+                }}>
+                    <Text style={[styles.textDark,fontStyle.jockeyOne,{
+                        fontSize:48,
+                    }]}>
+                        Welcome to
+                    </Text>
+                    <Text style={[styles.textDark,fontStyle.jockeyOne,{
+                        fontSize:84,
+                    }]}>
+                        CrimeConnect
+                    </Text>
+                    <Text style={[styles.textDark,fontStyle.jockeyOne,{
+                        fontSize:28,
+                    }]}>
+                        Become responsible with your powers
+                    </Text>
+                </View>
+                <Link push href='/auth' style={[{
+                    width:'90%',
+                    borderRadius:32,
+                    maxHeight:64,
+                    minHeight:64,
+                    textAlignVertical:'center',
+                    margin:16
+                },styles.blue]}>
+                    <Text style={[styles.textLight,fontStyle.jockeyOne,{
+                        fontSize:32,
+                    }]}>Save your city</Text>
+                </Link>
             </View>
-            <Pressable style={[{
-                width:'90%',
-                borderRadius:32,
-                maxHeight:72,
-                flex:1,
-                justifyContent:'center',
-                alignItems:'center',
-                margin:10
-            },styles.blue]}>
-                <Text style={[styles.textLight,fontStyle.jockeyOne,{
-                    fontSize:32,
-                }]}>Save your city</Text>
-            </Pressable>
-        </View>
+        </SafeAreaProvider>
     )
 }

@@ -1,32 +1,30 @@
 
 import { StyleSheet } from "react-native"
 
-const color = {
-    'bg':'#ddd172',
+export const color = {
+    'bg':'#A3D5FF',
     'fontdark':'#272727',
     'fontlight':'#efefef',
     'blue':'#232834',
-    'black':'#191919'
+    'black':'#191919',
+    'darkborder':'#4a5575'
 }
 
+export const fontStyle = StyleSheet.create({
+    jockeyOne:{
+        fontFamily:'JockeyOne_400Regular'
+    }
+})
+
 export const styles = StyleSheet.create({
-    container:{
+    main:{
         padding:1,
         flex:1,
         flexDirection:'column',
         justifyContent:'center',
         alignItems:'center',
+        gap:12,
         backgroundColor:color.bg
-    },
-    form:{
-        minWidth:'75%',
-        margin:12,
-        padding:10,
-        flex:1,
-        justifyContent:'flex-start',
-        alignItems:'flex-start',
-        flexDirection:'column',
-        gap:16,
     },
     textLight:{
         textAlign:'center',
@@ -54,6 +52,7 @@ export const styles = StyleSheet.create({
         justifyContent:'center',
         gap:6,
         maxHeight:48,
+        minHeight:48,
         margin:4,
         minWidth:'75%',
         paddingHorizontal:12,
