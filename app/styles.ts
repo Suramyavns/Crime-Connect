@@ -50,7 +50,7 @@ export const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'center',
-        gap:6,
+        gap:1,
         maxHeight:48,
         minHeight:48,
         margin:4,

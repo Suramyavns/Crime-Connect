@@ -45,7 +45,7 @@ export default function AuthScreen(){
                     <Text style={[fontStyle.jockeyOne,styles.textLight,{
                         fontSize:28,
                         textAlignVertical:'center',
-                    }]}>Become a vigilante</Text>
+                    }]}>Become a Vigilante</Text>
                 </Pressable>
                 <Text style={[fontStyle.jockeyOne,styles.textDark,{
                     fontSize:28
@@ -53,19 +53,9 @@ export default function AuthScreen(){
                 <Pressable style={[styles.btn,{
                     backgroundColor:color.black,
                 }]}>
-                    <Text style={[fontStyle.jockeyOne,styles.textLight,{
-                        fontSize:28,
-                        textAlignVertical:'center',
-                        flex:1,
-                        width:'100%',
-                        alignItems:'center',
-                        flexDirection:'row',
-                        justifyContent:'center',
-                    }]}>
-                        Login
-                        <MaterialIcons name="bolt" size={28}  />
-                        with Google
-                    </Text>
+                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>Login</Text>
+                    <MaterialIcons color={color.fontlight} name="bolt" size={24} />
+                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>with google</Text>
                 </Pressable>
             </View>
         </View>
