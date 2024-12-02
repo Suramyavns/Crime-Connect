@@ -1,11 +1,47 @@
-import { View, Text, TextInput, StyleSheet, Pressable, ScrollView, KeyboardAvoidingView, Platform, Dimensions } from "react-native"
+import { View, Text, TextInput, StyleSheet, Pressable, Dimensions } from "react-native"
 import { color, fontStyle, styles } from "./styles"
 import { useState } from "react"
-import { FontAwesome6, MaterialIcons } from "@expo/vector-icons"
+import { MaterialIcons } from "@expo/vector-icons"
+import { FIREBASE_AUTH } from "@/FirebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 export default function AuthScreen(){
-    const [email, setEmail] = useState('')
-    const [password,setPassword]=useState('')
-    const [confirmation,setConfirmation]=useState('')
+    const [email, setEmail] = useState('');
+    const [password,setPassword]=useState('');
+    const [confirmation,setConfirmation]=useState('');
+    const [loading,toggleLoading]=useState(false);
+    const auth = FIREBASE_AUTH;
+
+    const handleSignUp = async()=>{
+        toggleLoading(true);
+        if(email!=='' && password!=='' && password===confirmation){
+            try{
+                const response = await createUserWithEmailAndPassword(auth,email,password);
+                alert('Check your emails');
+            }
+            catch(error:any){
+                alert(error.message)
+            }
+        }
+        else{
+            if(password!==confirmation){
+                alert('Password do not match!')
+            }
+            else if(email===''){
+                alert('No email provided!')
+            }
+            else{alert('Invalid credentials!')}
+        }
+        toggleLoading(false);
+    }
+
+    const handleGoogle = async()=>{
+        toggleLoading(true);
+        setPassword('');
+        setConfirmation('');
+        setEmail('');
+        toggleLoading(false);
+    }
+
     return(
         <View style={{
             backgroundColor:color.bg,
@@ -39,7 +75,10 @@ export default function AuthScreen(){
                 flexDirection:'column',
                 gap:8,
             }}>
-                <Pressable style={[styles.btn,{
+                <Pressable
+                disabled={loading}
+                onPressIn={handleSignUp}
+                style={[styles.btn,{
                     backgroundColor:color.black,
                 }]}>
                     <Text style={[fontStyle.jockeyOne,styles.textLight,{
@@ -50,7 +89,7 @@ export default function AuthScreen(){
                 <Text style={[fontStyle.jockeyOne,styles.textDark,{
                     fontSize:28
                 }]}>OR</Text>
-                <Pressable style={[styles.btn,{
+                <Pressable onPressIn={handleGoogle} style={[styles.btn,{
                     backgroundColor:color.black,
                 }]}>
                     <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>Login</Text>

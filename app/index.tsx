@@ -3,6 +3,8 @@ import { styles,fontStyle } from "./styles"
 import { JockeyOne_400Regular, useFonts } from "@expo-google-fonts/jockey-one"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Link } from "expo-router"
+import { useEffect } from "react"
+import { GoogleSignin } from "react-native-google-signin"
 
 export default function Index(){
     const [fontsLoaded]=useFonts({
