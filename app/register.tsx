@@ -1,21 +1,42 @@
 import { View, Text, TextInput, StyleSheet, Pressable, Dimensions } from "react-native"
 import { color, fontStyle, styles } from "./styles"
-import { useState } from "react"
-import { MaterialIcons } from "@expo/vector-icons"
-import { FIREBASE_AUTH } from "@/FirebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react"
+import { createUserWithEmailAndPassword, onAuthStateChanged, User} from "firebase/auth";
+import { auth } from "@/FirebaseConfig";
+import {GoogleSignin, isSuccessResponse, User as googleUser} from '@react-native-google-signin/google-signin'
+import { useNavigation } from "expo-router";
+
 export default function AuthScreen(){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
     const [confirmation,setConfirmation]=useState('');
-    const [loading,toggleLoading]=useState(false);
-    const auth = FIREBASE_AUTH;
+    const [loading,toggleLoading]=useState(false);    
+    const navigator = useNavigation()
+    const [user,setUser]=useState<googleUser|User|null>(null)
+
+    useEffect(()=>{
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                // console.log('User  is signed in:', user);
+                // Redirect to the main page or dashboard
+                setUser(user)
+            } else {
+                // User is signed out
+                setUser(null)
+                console.log('No user is signed in');
+            }
+        });
+        if(user){
+            navigator.navigate('mainpage')
+        }
+    }, [navigator]);
 
     const handleSignUp = async()=>{
         toggleLoading(true);
         if(email!=='' && password!=='' && password===confirmation){
             try{
-                const response = await createUserWithEmailAndPassword(auth,email,password);
+                await createUserWithEmailAndPassword(auth,email,password);
                 alert('Check your emails');
             }
             catch(error:any){
@@ -34,11 +55,22 @@ export default function AuthScreen(){
         toggleLoading(false);
     }
 
-    const handleGoogle = async()=>{
+    const handleGoogle = async ()=>{
         toggleLoading(true);
-        setPassword('');
-        setConfirmation('');
-        setEmail('');
+        setPassword('')
+        setConfirmation('')
+        setEmail('')
+        try{
+            await GoogleSignin.hasPlayServices();
+            const response = await GoogleSignin.signIn();
+            if(isSuccessResponse(response)){
+                alert(`Welcome ${response.data.user.name}`);
+            }
+        }
+        catch(error:any){
+            console.log(error)
+            alert(error.message)
+        }
         toggleLoading(false);
     }
 
@@ -86,15 +118,29 @@ export default function AuthScreen(){
                         textAlignVertical:'center',
                     }]}>Become a Vigilante</Text>
                 </Pressable>
-                <Text style={[fontStyle.jockeyOne,styles.textDark,{
-                    fontSize:28
-                }]}>OR</Text>
-                <Pressable onPressIn={handleGoogle} style={[styles.btn,{
+                <Pressable onPress={()=>{navigator.navigate('login')}} style={[styles.btn,{
                     backgroundColor:color.black,
                 }]}>
-                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>Login</Text>
-                    <MaterialIcons color={color.fontlight} name="bolt" size={24} />
-                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>with google</Text>
+                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>
+                        I already have an account
+                    </Text>
+                </Pressable>
+                <Pressable onPress={handleGoogle} style={[styles.btn,{
+                    backgroundColor:color.black,
+                }]}>
+                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>
+                        Continue with Google
+                    </Text>
+                </Pressable>
+                <Pressable onPress={async()=>{
+                    const response = await GoogleSignin.signOut();
+                    console.log(response??"Signed out")
+                }} style={[styles.btn,{
+                    backgroundColor:color.black,
+                }]}>
+                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>
+                        SIGN OUT 
+                    </Text>
                 </Pressable>
             </View>
         </View>

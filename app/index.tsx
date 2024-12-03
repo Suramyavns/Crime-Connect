@@ -1,12 +1,34 @@
-import { Image,Text, View, Pressable, StyleSheet } from "react-native"
+import { Image,Text, View } from "react-native"
 import { styles,fontStyle } from "./styles"
 import { JockeyOne_400Regular, useFonts } from "@expo-google-fonts/jockey-one"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { Link } from "expo-router"
-import { useEffect } from "react"
-import { GoogleSignin } from "react-native-google-signin"
+import { Link, useNavigation } from "expo-router"
+import { onAuthStateChanged, User } from "firebase/auth"
+import { useEffect, useState } from "react"
+import { auth } from "@/FirebaseConfig"
+
 
 export default function Index(){
+    const navigator = useNavigation()
+    const [user,setUser]=useState<User|null>(null)
+    useEffect(()=>{
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                // console.log('User  is signed in:', user);
+                // Redirect to the main page or dashboard
+                setUser(user)
+            } else {
+                // User is signed out
+                setUser(null)
+                console.log('No user is signed in');
+            }
+        });
+        if(user){
+            navigator.navigate('mainpage')
+        }
+    }, []);
+
     const [fontsLoaded]=useFonts({
         JockeyOne_400Regular
     })
@@ -41,7 +63,7 @@ export default function Index(){
                         Become responsible with your powers
                     </Text>
                 </View>
-                <Link push href='/auth' style={[{
+                <Link push href={'/register'} style={[{
                     width:'90%',
                     borderRadius:32,
                     maxHeight:64,
