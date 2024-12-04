@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { createUserWithEmailAndPassword, onAuthStateChanged, User} from "firebase/auth";
 import { auth } from "@/FirebaseConfig";
 import { useNavigation } from "expo-router";
+import { useFonts } from "expo-font";
 
 export default function AuthScreen(){
     const [email, setEmail] = useState('');
@@ -52,54 +53,70 @@ export default function AuthScreen(){
         toggleLoading(false);
     }
 
+    const [fontsLoaded] = useFonts({
+        'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
+        'Sans':require('../assets/fonts/Alumni_Sans/static/AlumniSans-Medium.ttf'),
+        'SansBold':require('../assets/fonts/Alumni_Sans/static/AlumniSans-Bold.ttf')
+    })
+
+    if(!fontsLoaded){
+        return undefined
+    }
+
+    const height = Dimensions.get('screen').height
     return(
         <View style={{
             backgroundColor:color.bg,
-            height:Dimensions.get('screen').height
+            height:height
         }}>
-            <Text style={[styles.textDark,fontStyle.jockeyOne,{
-                fontSize: 64,
-                maxHeight:'20%',
-                minHeight:'20%',
-                textAlignVertical:'bottom'
-            }]}>Create an account</Text>
             <View style={{
-                maxHeight:'40%',
-                minHeight:'40%',
-                flex:1,
+                height:height*0.2,
                 justifyContent:'center',
-                alignItems:'center',
-                flexDirection:'column',
-                gap:24,
+                alignItems:'center'
             }}>
-                <TextInput value={email} onChangeText={setEmail} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox,fontStyle.jockeyOne]} placeholder="Your email"/>
-                <TextInput passwordRules='Password must have 8 letters and special characters' secureTextEntry={true} value={password} onChangeText={setPassword} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox,fontStyle.jockeyOne]} placeholder="Protect with password"/>
-                <TextInput secureTextEntry={true} value={confirmation} onChangeText={setConfirmation} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox,fontStyle.jockeyOne]} placeholder="Confirm your password"/>
+                <Text style={{
+                    color:color.white,
+                    fontSize:56,
+                    fontFamily:'AudioWide'
+                }}>
+                    Sign Up
+                </Text>
             </View>
             <View style={{
-                maxHeight:'40%',
-                minHeight:'40%',
-                flex:1,
-                justifyContent:'flex-start',
-                alignItems:'center',
-                flexDirection:'column',
-                gap:8,
+                height:height*0.4,
+                gap:40,
+                justifyContent:'center',
+                alignItems:'center'
             }}>
+                <TextInput value={email} onChangeText={setEmail} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Your email"/>
+                <TextInput passwordRules='Password must have 8 letters and special characters' secureTextEntry={true} value={password} onChangeText={setPassword} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Protect with password"/>
+                <TextInput secureTextEntry={true} value={confirmation} onChangeText={setConfirmation} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Confirm your password"/>
                 <Pressable
                 disabled={loading}
                 onPressIn={handleSignUp}
-                style={[styles.btn,{
-                    backgroundColor:color.black,
-                }]}>
-                    <Text style={[fontStyle.jockeyOne,styles.textLight,{
-                        fontSize:28,
-                        textAlignVertical:'center',
-                    }]}>Become a Vigilante</Text>
+                style={authstyles.button}>
+                    <Text style={{
+                        color:color.black,
+                        fontSize:36,
+                        textAlign:'center',
+                        fontFamily:'SansBold'
+                    }}>
+                        Become a Vigilante
+                    </Text>
                 </Pressable>
-                <Pressable onPress={()=>{navigator.navigate('login')}} style={[styles.btn,{
-                    backgroundColor:color.black,
-                }]}>
-                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>
+            </View>
+            <View style={{
+                height:height*0.3,
+                justifyContent:'flex-end',
+                alignItems:'center'
+            }}>
+                <Pressable onPress={()=>{navigator.navigate('login')}} style={authstyles.button}>
+                    <Text style={{
+                        color:color.black,
+                        fontSize:36,
+                        textAlign:'center',
+                        fontFamily:'SansBold'
+                    }}>
                         I already have an account
                     </Text>
                 </Pressable>
@@ -110,15 +127,21 @@ export default function AuthScreen(){
 
 const authstyles = StyleSheet.create({
     inputbox:{
-        minWidth:'80%',
-        maxWidth:'80%',
-        height:60,
-        borderWidth:4,
-        borderColor:color.darkborder,
-        backgroundColor:color.blue,
-        borderRadius:24,
-        fontSize:24,
+        width:Dimensions.get('screen').width*0.85,
+        borderRadius:12,
+        borderWidth:1,
+        borderColor:color.blue,
+        height:57,
         paddingHorizontal:12,
-        color:color.fontlight
+        fontSize:20,
+        fontFamily:'Sans',
+        color:color.white
+    },
+    button:{
+        backgroundColor:color.blue,
+        width:'85%',
+        textAlign:'center',
+        padding:8,
+        borderRadius:12,
     }
 })

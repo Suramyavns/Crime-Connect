@@ -2,11 +2,12 @@
 import { StyleSheet } from "react-native"
 
 export const color = {
-    'bg':'#A3D5FF',
+    'bg':'#272727',
     'fontdark':'#272727',
     'fontlight':'#efefef',
-    'blue':'#232834',
-    'black':'#191919',
+    'white':'#efefef',
+    'blue':'#39a6e1',
+    'black':'#272727',
     'darkborder':'#4a5575'
 }
 
@@ -21,9 +22,8 @@ export const styles = StyleSheet.create({
         padding:1,
         flex:1,
         flexDirection:'column',
-        justifyContent:'center',
+        justifyContent:'space-around',
         alignItems:'center',
-        gap:12,
         backgroundColor:color.bg
     },
     textLight:{
