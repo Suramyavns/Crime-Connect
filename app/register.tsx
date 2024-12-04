@@ -3,7 +3,6 @@ import { color, fontStyle, styles } from "./styles"
 import { useEffect, useState } from "react"
 import { createUserWithEmailAndPassword, onAuthStateChanged, User} from "firebase/auth";
 import { auth } from "@/FirebaseConfig";
-import {GoogleSignin, isSuccessResponse, User as googleUser} from '@react-native-google-signin/google-signin'
 import { useNavigation } from "expo-router";
 
 export default function AuthScreen(){
@@ -12,7 +11,7 @@ export default function AuthScreen(){
     const [confirmation,setConfirmation]=useState('');
     const [loading,toggleLoading]=useState(false);    
     const navigator = useNavigation()
-    const [user,setUser]=useState<googleUser|User|null>(null)
+    const [user,setUser]=useState<User|null>(null)
 
     useEffect(()=>{
         onAuthStateChanged(auth, (user) => {
@@ -21,15 +20,13 @@ export default function AuthScreen(){
                 // console.log('User  is signed in:', user);
                 // Redirect to the main page or dashboard
                 setUser(user)
+                navigator.navigate('mainpage')
             } else {
                 // User is signed out
                 setUser(null)
                 console.log('No user is signed in');
             }
         });
-        if(user){
-            navigator.navigate('mainpage')
-        }
     }, [navigator]);
 
     const handleSignUp = async()=>{
@@ -51,25 +48,6 @@ export default function AuthScreen(){
                 alert('No email provided!')
             }
             else{alert('Invalid credentials!')}
-        }
-        toggleLoading(false);
-    }
-
-    const handleGoogle = async ()=>{
-        toggleLoading(true);
-        setPassword('')
-        setConfirmation('')
-        setEmail('')
-        try{
-            await GoogleSignin.hasPlayServices();
-            const response = await GoogleSignin.signIn();
-            if(isSuccessResponse(response)){
-                alert(`Welcome ${response.data.user.name}`);
-            }
-        }
-        catch(error:any){
-            console.log(error)
-            alert(error.message)
         }
         toggleLoading(false);
     }
@@ -123,23 +101,6 @@ export default function AuthScreen(){
                 }]}>
                     <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>
                         I already have an account
-                    </Text>
-                </Pressable>
-                <Pressable onPress={handleGoogle} style={[styles.btn,{
-                    backgroundColor:color.black,
-                }]}>
-                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>
-                        Continue with Google
-                    </Text>
-                </Pressable>
-                <Pressable onPress={async()=>{
-                    const response = await GoogleSignin.signOut();
-                    console.log(response??"Signed out")
-                }} style={[styles.btn,{
-                    backgroundColor:color.black,
-                }]}>
-                    <Text style={[fontStyle.jockeyOne,styles.textLight,{fontSize:28}]}>
-                        SIGN OUT 
                     </Text>
                 </Pressable>
             </View>
