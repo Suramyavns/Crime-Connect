@@ -1,7 +1,7 @@
 import { Dimensions, Image,Text, View } from "react-native"
 import { styles, color } from "./styles"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { Link, useNavigation } from "expo-router"
+import { Link, useNavigation,router } from "expo-router"
 import { onAuthStateChanged, User } from "firebase/auth"
 import { useEffect, useState } from "react"
 import { auth } from "@/FirebaseConfig"
@@ -24,14 +24,14 @@ export default function Index(){
             }
         });
         if(user){
-            navigator.navigate('mainpage')
+            router.replace('/(main)')
         }
     }, []);
 
     const [fontsLoaded] = useFonts({
         'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
-        'Sans':require('../assets/fonts/Alumni_Sans/static/AlumniSans-Medium.ttf'),
-        'SansBold':require('../assets/fonts/Alumni_Sans/static/AlumniSans-Bold.ttf')
+        'Sans':require('../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
+        'SansBold':require('../assets/fonts/Manrope/static/Manrope-Bold.ttf')
     })
 
     if(!fontsLoaded){
@@ -63,7 +63,7 @@ export default function Index(){
                     </Text>
                 </View>
                 <View style={{height:height*4/8,justifyContent:'flex-end'}}>
-                    <Link push href={'/register'} style={{
+                    <Link replace href={'/register'} style={{
                         backgroundColor:color.blue,
                         minWidth:'85%',
                         textAlign:'center',
@@ -71,8 +71,9 @@ export default function Index(){
                         borderRadius:12
                     }}>
                         <Text style={{
-                            color:color.black,
-                            fontSize:40,
+                            textAlignVertical:'center',
+                            color:color.white,
+                            fontSize:24,
                             fontFamily:'SansBold'
                         }}>
                             Save your city

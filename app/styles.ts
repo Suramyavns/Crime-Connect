@@ -6,7 +6,7 @@ export const color = {
     'fontdark':'#272727',
     'fontlight':'#efefef',
     'white':'#efefef',
-    'blue':'#39a6e1',
+    'blue':'#1d677f',
     'black':'#272727',
     'darkborder':'#4a5575'
 }

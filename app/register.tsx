@@ -1,11 +1,10 @@
-import { View, Text, TextInput, StyleSheet, Pressable, Dimensions } from "react-native"
+import { View, Text, TextInput, StyleSheet, Pressable, Dimensions, ActivityIndicator } from "react-native"
 import { color, fontStyle, styles } from "./styles"
 import { useEffect, useState } from "react"
 import { createUserWithEmailAndPassword, onAuthStateChanged, User} from "firebase/auth";
 import { auth } from "@/FirebaseConfig";
-import { useNavigation } from "expo-router";
+import { useNavigation,router } from "expo-router";
 import { useFonts } from "expo-font";
-
 export default function AuthScreen(){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
@@ -21,7 +20,7 @@ export default function AuthScreen(){
                 // console.log('User  is signed in:', user);
                 // Redirect to the main page or dashboard
                 setUser(user)
-                navigator.navigate('mainpage')
+                router.replace('/(main)')
             } else {
                 // User is signed out
                 setUser(null)
@@ -35,7 +34,6 @@ export default function AuthScreen(){
         if(email!=='' && password!=='' && password===confirmation){
             try{
                 await createUserWithEmailAndPassword(auth,email,password);
-                alert('Check your emails');
             }
             catch(error:any){
                 alert(error.message)
@@ -55,8 +53,8 @@ export default function AuthScreen(){
 
     const [fontsLoaded] = useFonts({
         'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
-        'Sans':require('../assets/fonts/Alumni_Sans/static/AlumniSans-Medium.ttf'),
-        'SansBold':require('../assets/fonts/Alumni_Sans/static/AlumniSans-Bold.ttf')
+        'Sans':require('../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
+        'SansBold':require('../assets/fonts/Manrope/static/Manrope-Bold.ttf')
     })
 
     if(!fontsLoaded){
@@ -88,32 +86,39 @@ export default function AuthScreen(){
                 justifyContent:'center',
                 alignItems:'center'
             }}>
-                <TextInput value={email} onChangeText={setEmail} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Your email"/>
-                <TextInput passwordRules='Password must have 8 letters and special characters' secureTextEntry={true} value={password} onChangeText={setPassword} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Protect with password"/>
-                <TextInput secureTextEntry={true} value={confirmation} onChangeText={setConfirmation} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Confirm your password"/>
-                <Pressable
-                disabled={loading}
-                onPressIn={handleSignUp}
-                style={authstyles.button}>
-                    <Text style={{
-                        color:color.black,
-                        fontSize:36,
-                        textAlign:'center',
-                        fontFamily:'SansBold'
-                    }}>
-                        Become a Vigilante
-                    </Text>
-                </Pressable>
+                {
+                    loading?
+                    <ActivityIndicator size={100} color={color.white} />
+                    :
+                    <>
+                        <TextInput value={email} onChangeText={setEmail} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Your email"/>
+                        <TextInput passwordRules='Password must have 8 letters and special characters' secureTextEntry={true} value={password} onChangeText={setPassword} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Protect with password"/>
+                        <TextInput secureTextEntry={true} value={confirmation} onChangeText={setConfirmation} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Confirm your password"/>
+                        <Pressable
+                        disabled={loading}
+                        onPressIn={handleSignUp}
+                        style={authstyles.button}>
+                            <Text style={{
+                                color:color.white,
+                                fontSize:24,
+                                textAlign:'center',
+                                fontFamily:'SansBold'
+                            }}>
+                                Become a Vigilante
+                            </Text>
+                        </Pressable>
+                    </>
+                }
             </View>
             <View style={{
                 height:height*0.3,
                 justifyContent:'flex-end',
                 alignItems:'center'
             }}>
-                <Pressable onPress={()=>{navigator.navigate('login')}} style={authstyles.button}>
+                <Pressable onPress={()=>{router.replace('/login')}} style={authstyles.button}>
                     <Text style={{
-                        color:color.black,
-                        fontSize:36,
+                        color:color.white,
+                        fontSize:24,
                         textAlign:'center',
                         fontFamily:'SansBold'
                     }}>
