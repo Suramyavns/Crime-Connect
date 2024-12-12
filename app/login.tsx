@@ -12,29 +12,13 @@ export default function AuthScreen(){
     const [password,setPassword]=useState('');
     const [loading,toggleLoading]=useState(false);    
     const navigator = useNavigation()
-    const [user,setUser]=useState<User|null>(null)
-
-    useEffect(()=>{
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in
-                // console.log('User  is signed in:', user);
-                // Redirect to the main page or dashboard
-                setUser(user)
-                router.replace('/(main)')
-            } else {
-                // User is signed out
-                setUser(null)
-                console.log('No user is signed in');
-            }
-        });
-    }, [navigator]);
 
     const handleSignUp = async()=>{
         toggleLoading(true);
         if(email!=='' && /\S+@\S+\.\S+/.test(email) && password!==''){
             try{
                 await signInWithEmailAndPassword(auth,email,password);
+                router.replace('/')
             }
             catch(error:any){
                 alert(error.message)

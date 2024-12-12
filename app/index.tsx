@@ -1,4 +1,4 @@
-import { Dimensions, Image,Text, View } from "react-native"
+import { ActivityIndicator, Dimensions, Image,Text, View } from "react-native"
 import { styles, color, fontStyle } from "./styles"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Link, useNavigation,router } from "expo-router"
@@ -8,24 +8,23 @@ import { auth } from "@/FirebaseConfig"
 import { useFonts } from "expo-font"
 
 export default function Index(){
-    const navigator = useNavigation()
+    const [loading,setLoading]=useState(false)
     const [user,setUser]=useState<User|null>(null)
     useEffect(()=>{
+        setLoading(true)
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is signed in
                 // console.log('User  is signed in:', user);
                 // Redirect to the main page or dashboard
-                setUser(user)
+                router.replace('/(main)')
             } else {
                 // User is signed out
                 setUser(null)
                 console.log('No user is signed in');
             }
         });
-        if(user){
-            router.replace('/(main)')
-        }
+        setLoading(false)
     }, []);
 
     const [fontsLoaded] = useFonts(fontStyle)
@@ -37,6 +36,10 @@ export default function Index(){
     const height = Dimensions.get('screen').height
     return(
         <SafeAreaProvider>
+            {
+                loading?
+                <ActivityIndicator size={150} color={color.blue} />
+                :
             <View style={styles.main}>
                 <View style={{
                     height:height*2/8,
@@ -77,6 +80,7 @@ export default function Index(){
                     </Link>
                 </View>
             </View>
+            }
         </SafeAreaProvider>
     )
 }
