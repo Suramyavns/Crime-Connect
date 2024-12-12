@@ -34,8 +34,11 @@ const UserProfile = () => {
       catch(error){
         console.error(error)
       }
+      finally{
+        setLoading(false)
+      }
       
-      setLoading(false)
+      
   }, []);
 
   return (

@@ -21,7 +21,6 @@ export default function Index(){
             } else {
                 // User is signed out
                 setUser(null)
-                console.log('No user is signed in');
             }
         });
         setLoading(false)
