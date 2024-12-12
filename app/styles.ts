@@ -1,21 +1,22 @@
 
-import { StyleSheet } from "react-native"
+import { Dimensions, StyleSheet } from "react-native"
 
 export const color = {
     'bg':'#272727',
     'fontdark':'#272727',
     'fontlight':'#efefef',
     'white':'#efefef',
-    'blue':'#1d677f',
+    'blue':'#386394',
     'black':'#272727',
-    'darkborder':'#4a5575'
+    'darkborder':'#4a5575',
+    'red':'#d94545'
 }
 
-export const fontStyle = StyleSheet.create({
-    jockeyOne:{
-        fontFamily:'JockeyOne_400Regular'
-    }
-})
+export const fontStyle = {
+    'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
+    'Sans':require('../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
+    'SansBold':require('../assets/fonts/Manrope/static/Manrope-Bold.ttf')
+}
 
 export const styles = StyleSheet.create({
     main:{
@@ -45,24 +46,22 @@ export const styles = StyleSheet.create({
         borderWidth:2,
         borderStyle:'solid'
     },
-    btn:{
-        flex:1,
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
-        gap:1,
-        maxHeight:48,
-        minHeight:48,
-        margin:4,
-        minWidth:'75%',
-        paddingHorizontal:12,
-        height:'auto',
+    inputbox:{
+        width:Dimensions.get('screen').width*0.85,
         borderRadius:12,
-        paddingVertical:8,
+        borderWidth:1,
+        borderColor:color.blue,
+        height:57,
+        paddingHorizontal:12,
+        fontSize:20,
+        fontFamily:'Sans',
+        color:color.white
     },
-    textInput:{
+    button:{
+        backgroundColor:color.blue,
+        width:Dimensions.get('screen').width*.85,
+        textAlign:'center',
+        padding:8,
         borderRadius:12,
-        paddingHorizontal:12,
-        minWidth:'85%'
     }
 })

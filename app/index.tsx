@@ -1,5 +1,5 @@
 import { Dimensions, Image,Text, View } from "react-native"
-import { styles, color } from "./styles"
+import { styles, color, fontStyle } from "./styles"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Link, useNavigation,router } from "expo-router"
 import { onAuthStateChanged, User } from "firebase/auth"
@@ -28,11 +28,7 @@ export default function Index(){
         }
     }, []);
 
-    const [fontsLoaded] = useFonts({
-        'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
-        'Sans':require('../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
-        'SansBold':require('../assets/fonts/Manrope/static/Manrope-Bold.ttf')
-    })
+    const [fontsLoaded] = useFonts(fontStyle)
 
     if(!fontsLoaded){
         return undefined

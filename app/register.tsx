@@ -31,7 +31,7 @@ export default function AuthScreen(){
 
     const handleSignUp = async()=>{
         toggleLoading(true);
-        if(email!=='' && password!=='' && password===confirmation){
+        if(email!=='' && /\S+@\S+\.\S+/.test(email) && password!=='' && password===confirmation){
             try{
                 await createUserWithEmailAndPassword(auth,email,password);
             }
@@ -46,16 +46,15 @@ export default function AuthScreen(){
             else if(email===''){
                 alert('No email provided!')
             }
+            else if(!/\S+@\S+\.\S+/.test(email)){
+                alert('Invalid Email format!')
+            }
             else{alert('Invalid credentials!')}
         }
         toggleLoading(false);
     }
 
-    const [fontsLoaded] = useFonts({
-        'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
-        'Sans':require('../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
-        'SansBold':require('../assets/fonts/Manrope/static/Manrope-Bold.ttf')
-    })
+    const [fontsLoaded] = useFonts(fontStyle)
 
     if(!fontsLoaded){
         return undefined

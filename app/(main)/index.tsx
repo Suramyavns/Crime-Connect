@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Image, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { auth } from '@/FirebaseConfig';
 import { router, useNavigation } from 'expo-router';
 import {getUserProfile} from '../utils/crud_user'
 import { color } from '../styles';
+import { IUser } from '../interfaces/User';
 
 const UserProfile = () => {
-    const [user, setUser ] = useState<Object|null>(null);
+    const [user, setUser ] = useState<IUser|null>(null);
     const [loading,setLoading]=useState(false);
 
     async function fetchUserProfile(id:string){
@@ -45,7 +46,12 @@ const UserProfile = () => {
       padding:1,
       backgroundColor:color.bg
     }}>
-      <ActivityIndicator size={150} color={color.blue} />
+      {
+        loading?
+        <ActivityIndicator size={150} color={color.blue} />
+        :
+        <Text>{user?.username}</Text>
+      }
     </View>
   );
 };

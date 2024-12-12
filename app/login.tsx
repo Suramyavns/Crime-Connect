@@ -32,7 +32,7 @@ export default function AuthScreen(){
 
     const handleSignUp = async()=>{
         toggleLoading(true);
-        if(email!=='' && password!==''){
+        if(email!=='' && /\S+@\S+\.\S+/.test(email) && password!==''){
             try{
                 await signInWithEmailAndPassword(auth,email,password);
             }
@@ -46,11 +46,7 @@ export default function AuthScreen(){
         toggleLoading(false);
     }
 
-    const [fontsLoaded] = useFonts({
-        'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
-        'Sans':require('../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
-        'SansBold':require('../assets/fonts/Manrope/static/Manrope-Bold.ttf')
-    })
+    const [fontsLoaded] = useFonts(fontStyle)
 
     if(!fontsLoaded){
         return undefined

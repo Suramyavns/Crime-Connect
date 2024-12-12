@@ -1,24 +1,47 @@
 import { auth } from "@/FirebaseConfig";
 import { useNavigation,router } from "expo-router";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { View, Text, Dimensions, TextInput, Pressable, StyleSheet } from "react-native";
-import { color, styles } from "../styles";
+import { View, Text, Dimensions, TextInput, Pressable, StyleSheet, ActivityIndicator } from "react-native";
+import { color, fontStyle, styles } from "../styles";
 import { useFonts } from "expo-font";
 import DateInput from "../components/DatePicker";
 import PhoneNumberInput from '../components/PhoneNumberInput'
+import {Ionicons} from '@expo/vector-icons'
+import { createUserProfile } from "../utils/crud_user";
+import {ICountry} from 'react-native-international-phone-number'
+import {default_credibility} from '../utils/credibility'
+
+interface Warnings{
+    username:boolean,
+    phone:boolean,
+    fpronoun:boolean,
+    spronoun:boolean
+}
 
 export default function ProfileCreation(){
     const [date,setDate]=useState(new Date())
     const [showDate,setShowDate]=useState(false);
-    const [gender,setGender]=useState<string>()
-    const [phone,setPhone]=useState(null);
-    const [country,setCountry]=useState(null)
+    const [fpronoun,setFPronoun]=useState<string>()
+    const [spronoun,setSPronoun]=useState<string>()
+    const [phone,setPhone]=useState<string>();
+    const [country,setCountry]=useState<ICountry>()
     const [username,setUsername] = useState<string>()
+    const [loading,toggleLoading]=useState(false)
+    const [existingUser,setExistingUser]=useState<User|null>()
+    const [warning,setWarning]=useState<Warnings>({
+        username:false,
+        fpronoun:false,
+        phone:false,
+        spronoun:false
+    })
+    const [valid,setValid]=useState(true)
+
     useEffect(()=>{
         onAuthStateChanged(auth,(user)=>{
             if(user){
                 // [WIP]
+                setExistingUser(auth.currentUser)
             }
             else{
                 router.replace('/')
@@ -26,26 +49,44 @@ export default function ProfileCreation(){
         })
     })
 
-    const genders = [
-        {
-            "label":"Male 👨",
-            'value':'m'
-        },
-        {
-            "label":"Female 👩",
-            'value':'f'
-        },
-        {
-            "label":"Other 🏳️‍🌈",
-            'value':'o'
+    const validateForm = async() =>{
+        const newWarning = {
+            username:!Boolean(username?.length),
+            phone:!Boolean(phone?.length),
+            fpronoun:!Boolean(fpronoun),
+            spronoun:!Boolean(spronoun)
         }
-    ]
+        setWarning(newWarning);
+        return !Object.values(newWarning).some(item=>item===true)
+    }
 
-    const [fontsLoaded] = useFonts({
-        'AudioWide':require('../../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
-        'Sans':require('../../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
-        'SansBold':require('../../assets/fonts/Manrope/static/Manrope-Bold.ttf')
-    })
+    const handleSubmit = async() => {
+        if(!(await validateForm())){
+            return;
+        }
+        toggleLoading(true);
+        try{
+            await createUserProfile(existingUser?.uid,{
+                'username':username,
+                'phone':phone,
+                'credibility':default_credibility,
+                'email':existingUser?.email,
+                'fpronoun':fpronoun,
+                'spronoun':spronoun,
+                'dob':date,
+                'country':country?.callingCode
+            })
+            router.replace('/(main)')
+        }
+        catch(error){
+            alert(error)
+        }
+        finally{
+            toggleLoading(false);
+        }
+    }
+
+    const [fontsLoaded] = useFonts(fontStyle)
     const width = Dimensions.get('screen').width
     const height = Dimensions.get('screen').height
     return(
@@ -66,63 +107,79 @@ export default function ProfileCreation(){
                     Create a Profile
                 </Text>
             </View>
-            <View style={{
-                height:height*.5,
-                justifyContent:'center',
-                alignItems:'center',
-                gap:8
-            }}>
-                <View>
-                    <Pressable style={{
-                        width:width*.85,
-                        paddingHorizontal:12
-                    }} onPress={()=>{setShowDate(true)}}>
-                        <Text style={{color:color.fontlight,textAlignVertical:'center',fontFamily:'Sans',fontSize:24}}>When were you born? {"\u{1f382}"}</Text>
-                        <Text style={profileStyle.dateBox}>{date.toDateString()}</Text>
-                    </Pressable>
-                    <DateInput showDatePicker={showDate} changeDate={setDate} setShowDatePicker={setShowDate} />
-                </View>
-                <View>
-                    <Text style={{width:width*.85,paddingHorizontal:12,color:color.fontlight,fontFamily:'Sans',fontSize:24}}>What is your gender?</Text>
-                    <View style={{
-                        flexDirection:'row',
-                        justifyContent:'center',
-                        alignItems:'center', 
-                        gap:8
-                    }}>
-                        {
-                            genders.map((gen,index)=>{
-                                return(
-                                    <Pressable key={index} onPress={()=>{setGender(gen.value)}}>
-                                        <Text style={gen.value===gender?[profileStyle.genderBox,profileStyle.scaled]:profileStyle.genderBox}>{gen.label}</Text>
-                                    </Pressable>
-                                )
-                            })
-                        }
+            {
+                loading?
+                <ActivityIndicator size={150} color={color.blue} />
+                :
+                <View style={{
+                    height:height*.5,
+                    justifyContent:'flex-start',
+                    alignItems:'center',
+                    gap:14
+                }}>
+                    <View>
+                        <View style={{flexDirection:'row',gap:8}}>
+                            <Text style={[styles.textLight,{
+                                fontFamily:'Sans',
+                                fontSize:20,
+                                textAlign:'left',
+                                
+                            }]}>What should we call you?</Text>
+                            {warning.username && <Ionicons color={color.red} size={24} name="warning" />}
+                        </View>
+                        <TextInput placeholderTextColor={`${color.white}66`} placeholder="Set a username" style={[styles.inputbox,{marginVertical:12}]} onChangeText={setUsername} value={username} />
+                    </View>
+                    <View>
+                        <View style={{flexDirection:'row',gap:8}}>
+                            <Text style={[styles.textLight,{
+                                fontFamily:'Sans',
+                                fontSize:20,
+                                textAlign:'left',
+                            }]}>How should we call you?</Text>
+                            {warning.phone && <Ionicons color={color.red} size={24} name="warning" />}
+                        </View>
+                        <PhoneNumberInput selectedCountry={country} handleInputValue={setPhone} handleSelectedCountry={setCountry} inputValue={phone} key={2} />
+                    </View>
+                    <View>
+                        <View style={{flexDirection:'row',gap:8}}>
+                            <Text style={[styles.textLight,{
+                                fontFamily:'Sans',
+                                fontSize:20,
+                                textAlign:'left',
+                                
+                            }]}>What are your pronouns?</Text>
+                            {(warning.fpronoun || warning.spronoun) && <Ionicons color={color.red} size={24} name="warning" />}
+                        </View>
+                        <View style={{
+                            width:width*.85,
+                            flexDirection:'row',
+                            justifyContent:'space-between',
+                            marginVertical:12,
+                        }}>
+                            <TextInput onChangeText={setFPronoun} placeholderTextColor={`${color.fontlight}66`} placeholder="he/she/they" style={{...styles.inputbox,width:'49%'}} />
+                            <TextInput onChangeText={setSPronoun} placeholderTextColor={`${color.fontlight}66`} placeholder="him/her/them" style={{...styles.inputbox,width:'49%'}} />
+                        </View>
+                    </View>
+                    <View>
+                        <Text style={[styles.textLight,{
+                            fontFamily:'Sans',
+                            fontSize:20,
+                            textAlign:'left'
+                        }]}>I was born on ...</Text>
+                        <Pressable onPress={()=>{setShowDate(true)}}>
+                            <Text style={[styles.inputbox,{marginVertical:12,textAlign:'center',textAlignVertical:'center',fontSize:24,fontFamily:'SansBold'}]}>{date.toDateString()}</Text>
+                        </Pressable>
+                        <DateInput changeDate={setDate} setShowDatePicker={setShowDate} showDatePicker={showDate} key={4} />
                     </View>
                 </View>
-                <View>
-                    {/* <Text style={{width:width*.85,paddingHorizontal:12,color:color.fontlight,fontFamily:'Sans',fontSize:24}}>What is your number?</Text> */}
-                    <PhoneNumberInput selectedCountry={country} handleInputValue={setPhone} handleSelectedCountry={setCountry} inputValue={phone} key={2} />
-                </View>
-                <View>
-                    <TextInput placeholderTextColor={`${color.white}66`} placeholder="Set a username" style={profileStyle.inputbox} onChangeText={setUsername} value={username} />
-                </View>
-            </View>
+            }
             <View style={{
                 height:height*.2,
                 justifyContent:'flex-end',
                 alignItems:'center',
                 padding:1
             }}>
-                <Pressable style={[{
-                    width:width*.75,
-                    padding:8,
-                    borderRadius:8,
-                    alignSelf:'center',
-                    alignItems:'center',
-                    justifyContent:'center',
-                },styles.blue]}>
+                <Pressable onPress={handleSubmit} style={[styles.button]}>
                     <Text style={[styles.textLight,{
                         fontSize:28,
                         textAlign:'center',
@@ -136,48 +193,3 @@ export default function ProfileCreation(){
         </View>
     )
 }
-
-const profileStyle = StyleSheet.create({
-    dateBox:{
-        height:56,
-        textAlignVertical:'center',
-        color:color.white,
-        fontSize:24,
-        fontFamily:'SansBold',
-        textAlign:'center',
-        padding:8,
-        borderWidth:1,
-        marginVertical:12,
-        borderRadius:12,
-        borderColor:color.blue,
-    },
-    genderBox:{
-        height:'auto',
-        color:color.white,
-        fontSize:23,
-        fontFamily:'Sans',
-        textAlign:'center',
-        padding:8,
-        borderWidth:1,
-        marginVertical:12,
-        borderRadius:8,
-        textAlignVertical:'center',
-        borderColor:`${color.blue}`,
-    },
-    inputbox:{
-        borderRadius:12,
-        borderWidth:1,
-        width:Dimensions.get('screen').width*.8,
-        borderColor:color.blue,
-        height:56,
-        paddingHorizontal:12,
-        fontSize:20,
-        fontFamily:'SansBold',
-        color:color.white,
-        margin:12
-    },
-    scaled:{
-        fontFamily:'SansBold',
-        backgroundColor:color.blue
-    }
-})

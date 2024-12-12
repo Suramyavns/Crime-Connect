@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import PhoneInput from 'react-native-international-phone-number';
-import { color } from '../styles';
+import { color, styles } from '../styles';
 
 export default function PhoneNumberInput({handleInputValue,handleSelectedCountry,selectedCountry,inputValue}) {
 
@@ -22,11 +22,9 @@ export default function PhoneNumberInput({handleInputValue,handleSelectedCountry
 
 const inputStyles = StyleSheet.create({
   container: {
-    height:56,
-    backgroundColor: color.black,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: color.blue,
+    alignSelf:'center',
+    backgroundColor:color.black,
+    ...styles.inputbox
   },
   flagContainer: {
     borderTopLeftRadius: 7,
@@ -48,6 +46,7 @@ const inputStyles = StyleSheet.create({
     color: color.fontlight,
   },
   input: {
+    
     color: color.fontlight,
   },
 })

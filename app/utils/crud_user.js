@@ -16,3 +16,13 @@ export const getUserProfile = async(userid) =>{
         return error.message;
     }
 }
+
+export const createUserProfile = async(userid,data)=>{
+    try{
+        const docRef = doc(db,'users',userid);
+        await setDoc(docRef,data);
+    }
+    catch(error){
+        console.error(error)
+    }
+}
