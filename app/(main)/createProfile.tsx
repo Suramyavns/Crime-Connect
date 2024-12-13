@@ -6,12 +6,12 @@ import { useFonts } from "expo-font";
 import DateInput from "../components/DatePicker";
 import PhoneNumberInput from '../components/PhoneNumberInput'
 import {Ionicons,AntDesign} from '@expo/vector-icons'
-import { createUserProfile } from "../utils/crud_user";
+import { createUserProfile, uploadImageToBucket } from "../utils/crud_user";
 import {ICountry} from 'react-native-international-phone-number'
 import {default_credibility} from '../utils/credibility'
 import * as ImagePicker from 'expo-image-picker'
 import { auth } from "@/Appwrite";
-
+import { default_avatar } from "../utils/crud_user";
 interface Warnings{
     username:boolean,
     phone:boolean,
@@ -20,8 +20,7 @@ interface Warnings{
 }
 
 export default function ProfileCreation(){
-    const default_avatar = '../../assets/images/default_avatar.png'
-    const [profile,setProfile]=useState<string|null>(default_avatar);
+    const [profile,setProfile]=useState<string>();
     const [date,setDate]=useState(new Date())
     const [showDate,setShowDate]=useState(false);
     const [fpronoun,setFPronoun]=useState<string>()
@@ -49,8 +48,22 @@ export default function ProfileCreation(){
     }
 
     const uploadProfile = async () =>{
-        console.log('wip')
-        //
+        const user = await auth.get()
+        if(profile!==undefined){
+            const response = await fetch(profile)
+            const blob = await response.blob()
+            const file = {
+                name:`avatar_${user.$id}.jpg`,
+                size:blob.size,
+                type:blob.type,
+                uri:profile
+            }
+            const result = await uploadImageToBucket(user.$id,file)
+            return result
+        }
+        else{
+            return null;
+        }
     }
 
     const pickProfile = async()=>{
@@ -73,7 +86,7 @@ export default function ProfileCreation(){
         }
         toggleLoading(true);
         try{
-            await createUserProfile(user.$id,{
+            const profileData = {
                 'username':username,
                 'phone':phone,
                 'credibility':default_credibility,
@@ -82,7 +95,17 @@ export default function ProfileCreation(){
                 'spronoun':spronoun,
                 'dob':date,
                 'country':country?.callingCode
-            })
+            }
+            const response = await uploadProfile()
+            if(response){
+                await createUserProfile(user.$id,{
+                    ...profileData,
+                    'avatar':response.$id
+                })
+            }
+            else{
+                await createUserProfile(user.$id,profileData)
+            }
             router.replace('/(main)')
         }
         catch(error){
@@ -122,7 +145,7 @@ export default function ProfileCreation(){
                 }}>
                     {
                         loading?
-                        <ActivityIndicator color={color.bg} size={150} />
+                        <ActivityIndicator color={color.blue} size={150} />
                         :
                     <>
                     <View>
@@ -142,7 +165,7 @@ export default function ProfileCreation(){
                             justifyContent:'center',
                             gap:16
                         }}>
-                            <ImageBackground source={profile===default_avatar?require(default_avatar):{uri:profile}} imageStyle={{opacity:.4,resizeMode:'cover',borderRadius:100}} style={{...customs.round_btn}}>
+                            <ImageBackground source={profile ? { uri: profile } : default_avatar} imageStyle={{opacity:.4,resizeMode:'cover',borderRadius:100}} style={{...customs.round_btn}}>
                                 <Pressable onPress={()=>{pickProfile()}}>
                                     <AntDesign size={24} color={color.white} name="edit" />
                                 </Pressable>
@@ -201,16 +224,6 @@ export default function ProfileCreation(){
                 alignItems:'center',
                 padding:1
             }}>
-                <Pressable onPress={uploadProfile} style={[styles.button]}>
-                    <Text style={[styles.textLight,{
-                        fontSize:28,
-                        textAlign:'center',
-                        textAlignVertical:'center',
-                        fontFamily:'SansBold'
-                    }]}>
-                        Test upload
-                    </Text>
-                </Pressable>
                 <Pressable onPress={handleSubmit} style={[styles.button]}>
                     <Text style={[styles.textLight,{
                         fontSize:28,
