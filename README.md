@@ -9,7 +9,20 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npm install
    ```
-2. Create a FirebaseConfig.ts file in root directory of the project and provide the firebase project configuration
+2. Create an Appwrite.js
+   ```js
+      import { Client, Account,Databases,Storage, ID } from 'react-native-appwrite';
+
+      const client = new Client()
+         .setEndpoint('https://cloud.appwrite.io/v1')
+         .setProject(<your-project-id>)
+         .setPlatform(<your-android-package-name>);
+         
+      export const dbID = <your-database-id>
+      export const auth = new Account(client)
+      export const db = new Databases(client);
+      export const storage = new Storage(client);
+   ```
 
 3. Start the app
 
