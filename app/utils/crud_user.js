@@ -1,28 +1,23 @@
-import { db } from "@/FirebaseConfig";
-import { collection,doc,setDoc,getDoc,updateDoc,deleteDoc } from "firebase/firestore"
+import { db,dbID } from "@/Appwrite";
 
 export const getUserProfile = async(userid) =>{
     try{
-        const docRef = doc(db,'users',userid);
-        const docSnap = await getDoc(docRef);
-        if(docSnap.exists()){
-            return docSnap.data()
-        }
-        else{
-            return null;
-        }
+        const response = await db.getDocument(dbID,'users',userid)
+        return response;
     }
     catch(error){
-        return error.message;
+        console.log(error)
+        return null;
     }
 }
 
 export const createUserProfile = async(userid,data)=>{
     try{
-        const docRef = doc(db,'users',userid);
-        await setDoc(docRef,data);
+        const response = await db.createDocument(dbID,'users',userid,data);
+        return response
     }
     catch(error){
         console.error(error)
+        return null
     }
 }

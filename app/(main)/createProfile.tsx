@@ -1,16 +1,16 @@
-import { auth } from "@/FirebaseConfig";
-import { useNavigation,router } from "expo-router";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { View, Text, Dimensions, TextInput, Pressable, StyleSheet, ActivityIndicator } from "react-native";
-import { color, fontStyle, styles } from "../styles";
+import { View, Text, Dimensions, TextInput, Pressable, StyleSheet, ActivityIndicator, ImageBackground, Alert } from "react-native";
+import { color, fontStyle, styles } from "../styles/common";
 import { useFonts } from "expo-font";
 import DateInput from "../components/DatePicker";
 import PhoneNumberInput from '../components/PhoneNumberInput'
-import {Ionicons} from '@expo/vector-icons'
+import {Ionicons,AntDesign} from '@expo/vector-icons'
 import { createUserProfile } from "../utils/crud_user";
 import {ICountry} from 'react-native-international-phone-number'
 import {default_credibility} from '../utils/credibility'
+import * as ImagePicker from 'expo-image-picker'
+import { auth } from "@/Appwrite";
 
 interface Warnings{
     username:boolean,
@@ -20,39 +20,27 @@ interface Warnings{
 }
 
 export default function ProfileCreation(){
+    const default_avatar = '../../assets/images/default_avatar.png'
+    const [profile,setProfile]=useState<string|null>(default_avatar);
     const [date,setDate]=useState(new Date())
     const [showDate,setShowDate]=useState(false);
     const [fpronoun,setFPronoun]=useState<string>()
     const [spronoun,setSPronoun]=useState<string>()
-    const [phone,setPhone]=useState<string>();
+    const [phone,setPhone]=useState<string>('');
     const [country,setCountry]=useState<ICountry>()
     const [username,setUsername] = useState<string>()
     const [loading,toggleLoading]=useState(false)
-    const [existingUser,setExistingUser]=useState<User|null>()
     const [warning,setWarning]=useState<Warnings>({
         username:false,
         fpronoun:false,
         phone:false,
         spronoun:false
     })
-    const [valid,setValid]=useState(true)
-
-    useEffect(()=>{
-        onAuthStateChanged(auth,(user)=>{
-            if(user){
-                // [WIP]
-                setExistingUser(auth.currentUser)
-            }
-            else{
-                router.replace('/')
-            }
-        })
-    })
 
     const validateForm = async() =>{
         const newWarning = {
             username:!Boolean(username?.length),
-            phone:!Boolean(phone?.length),
+            phone:!Boolean(phone?.length>=10),
             fpronoun:!Boolean(fpronoun),
             spronoun:!Boolean(spronoun)
         }
@@ -60,17 +48,36 @@ export default function ProfileCreation(){
         return !Object.values(newWarning).some(item=>item===true)
     }
 
+    const uploadProfile = async () =>{
+        console.log('wip')
+        //
+    }
+
+    const pickProfile = async()=>{
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes:'images',
+            allowsEditing:false,
+            quality:1,
+            aspect:[1,1],
+        })
+
+        if(!result.canceled){
+            setProfile(result.assets[0].uri)
+        }
+    }
+
     const handleSubmit = async() => {
+        const user = await auth.get();
         if(!(await validateForm())){
             return;
         }
         toggleLoading(true);
         try{
-            await createUserProfile(existingUser?.uid,{
+            await createUserProfile(user.$id,{
                 'username':username,
                 'phone':phone,
                 'credibility':default_credibility,
-                'email':existingUser?.email,
+                'email':user.email,
                 'fpronoun':fpronoun,
                 'spronoun':spronoun,
                 'dob':date,
@@ -107,16 +114,17 @@ export default function ProfileCreation(){
                     Create a Profile
                 </Text>
             </View>
-            {
-                loading?
-                <ActivityIndicator size={150} color={color.blue} />
-                :
                 <View style={{
                     height:height*.5,
                     justifyContent:'flex-start',
                     alignItems:'center',
                     gap:14
                 }}>
+                    {
+                        loading?
+                        <ActivityIndicator color={color.bg} size={150} />
+                        :
+                    <>
                     <View>
                         <View style={{flexDirection:'row',gap:8}}>
                             <Text style={[styles.textLight,{
@@ -127,7 +135,20 @@ export default function ProfileCreation(){
                             }]}>What should we call you?</Text>
                             {warning.username && <Ionicons color={color.red} size={24} name="warning" />}
                         </View>
-                        <TextInput placeholderTextColor={`${color.white}66`} placeholder="Set a username" style={[styles.inputbox,{marginVertical:12}]} onChangeText={setUsername} value={username} />
+                        <View style={{
+                            width:width*.85,
+                            flexDirection:'row',
+                            alignItems:'center',
+                            justifyContent:'center',
+                            gap:16
+                        }}>
+                            <ImageBackground source={profile===default_avatar?require(default_avatar):{uri:profile}} imageStyle={{opacity:.4,resizeMode:'cover',borderRadius:100}} style={{...customs.round_btn}}>
+                                <Pressable onPress={()=>{pickProfile()}}>
+                                    <AntDesign size={24} color={color.white} name="edit" />
+                                </Pressable>
+                            </ImageBackground>
+                            <TextInput placeholderTextColor={`${color.white}66`} placeholder="Set a username" style={{marginVertical:12,...styles.inputbox,width:'80%'}} onChangeText={setUsername} value={username} />
+                        </View>
                     </View>
                     <View>
                         <View style={{flexDirection:'row',gap:8}}>
@@ -171,14 +192,25 @@ export default function ProfileCreation(){
                         </Pressable>
                         <DateInput changeDate={setDate} setShowDatePicker={setShowDate} showDatePicker={showDate} key={4} />
                     </View>
+                    </>
+                    }
                 </View>
-            }
             <View style={{
                 height:height*.2,
                 justifyContent:'flex-end',
                 alignItems:'center',
                 padding:1
             }}>
+                <Pressable onPress={uploadProfile} style={[styles.button]}>
+                    <Text style={[styles.textLight,{
+                        fontSize:28,
+                        textAlign:'center',
+                        textAlignVertical:'center',
+                        fontFamily:'SansBold'
+                    }]}>
+                        Test upload
+                    </Text>
+                </Pressable>
                 <Pressable onPress={handleSubmit} style={[styles.button]}>
                     <Text style={[styles.textLight,{
                         fontSize:28,
@@ -193,3 +225,13 @@ export default function ProfileCreation(){
         </View>
     )
 }
+
+const customs = StyleSheet.create({
+    round_btn:{
+        borderRadius:100,
+        width:56,
+        height:56,
+        justifyContent:'center',
+        alignItems:'center'
+    }
+})

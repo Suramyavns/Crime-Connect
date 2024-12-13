@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { auth } from '../../Appwrite';
 import { router } from 'expo-router';
 import {getUserProfile} from '../utils/crud_user'
-import { color } from '../styles/common';
+import { color, styles } from '../styles/common';
 
 const UserProfile = () => {
 
     async function fetchUserProfile(id:string){
       const response = await getUserProfile(id);
       if(response){
-        router.replace('/(main)/dashboard')
+        //
       }
       else{
         router.replace('/(main)/createProfile')
@@ -39,7 +39,11 @@ const UserProfile = () => {
       padding:1,
       backgroundColor:color.bg
     }}>
-      <ActivityIndicator size={150} color={color.blue} />
+      <Pressable style={styles.button} onPress={async()=>{await auth.deleteSession('current');router.replace('/(auth)')}}>
+        <Text style={{color:color.white}}>
+          Sign Out
+        </Text>
+      </Pressable>
     </View>
   );
 };

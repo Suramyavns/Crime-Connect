@@ -13,9 +13,9 @@ export const color = {
 }
 
 export const fontStyle = {
-    'AudioWide':require('../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
-    'Sans':require('../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
-    'SansBold':require('../assets/fonts/Manrope/static/Manrope-Bold.ttf')
+    'AudioWide':require('../../assets/fonts/Audiowide/Audiowide-Regular.ttf'),
+    'Sans':require('../../assets/fonts/Manrope/static/Manrope-Medium.ttf'),
+    'SansBold':require('../../assets/fonts/Manrope/static/Manrope-Bold.ttf')
 }
 
 export const styles = StyleSheet.create({

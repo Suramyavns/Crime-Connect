@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import { color } from "../styles";
+import { color } from "../styles/common";
 import DatePicker from 'react-native-date-picker'
 export default function DateInput({showDatePicker,setShowDatePicker,changeDate}){
     const [selectedDate,setSelectedDate]=useState(new Date());

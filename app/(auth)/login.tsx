@@ -1,38 +1,29 @@
 import { View, Text, TextInput, StyleSheet, Pressable, Dimensions, ActivityIndicator } from "react-native"
-import { color, fontStyle, styles } from "./styles"
+import { color, fontStyle, styles } from "../styles/common"
 import { useEffect, useState } from "react"
-import { createUserWithEmailAndPassword, onAuthStateChanged, User} from "firebase/auth";
-import { auth } from "@/FirebaseConfig";
+import { auth } from "../../Appwrite";
 import { useNavigation,router } from "expo-router";
 import { useFonts } from "expo-font";
+
 export default function AuthScreen(){
     const [email, setEmail] = useState('');
     const [password,setPassword]=useState('');
-    const [confirmation,setConfirmation]=useState('');
     const [loading,toggleLoading]=useState(false);    
+    const navigator = useNavigation()
 
     const handleSignUp = async()=>{
         toggleLoading(true);
-        if(email!=='' && /\S+@\S+\.\S+/.test(email) && password!=='' && password===confirmation){
+        if(email!=='' && /\S+@\S+\.\S+/.test(email) && password!==''){
             try{
-                await createUserWithEmailAndPassword(auth,email,password);
-                router.replace('/')
+                await auth.createEmailPasswordSession(email,password)
+                router.replace('/(main)')
             }
             catch(error:any){
                 alert(error.message)
             }
         }
         else{
-            if(password!==confirmation){
-                alert('Password do not match!')
-            }
-            else if(email===''){
-                alert('No email provided!')
-            }
-            else if(!/\S+@\S+\.\S+/.test(email)){
-                alert('Invalid Email format!')
-            }
-            else{alert('Invalid credentials!')}
+            alert('Invalid credentials!')
         }
         toggleLoading(false);
     }
@@ -59,23 +50,22 @@ export default function AuthScreen(){
                     fontSize:56,
                     fontFamily:'AudioWide'
                 }}>
-                    Sign Up
+                    Sign In
                 </Text>
             </View>
             <View style={{
-                height:height*0.4,
+                height:height*0.3,
                 gap:40,
                 justifyContent:'center',
                 alignItems:'center'
             }}>
                 {
                     loading?
-                    <ActivityIndicator size={100} color={color.white} />
+                    <ActivityIndicator size={100} color={color.blue}/>
                     :
                     <>
                         <TextInput value={email} onChangeText={setEmail} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Your email"/>
                         <TextInput passwordRules='Password must have 8 letters and special characters' secureTextEntry={true} value={password} onChangeText={setPassword} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Protect with password"/>
-                        <TextInput secureTextEntry={true} value={confirmation} onChangeText={setConfirmation} placeholderTextColor={color.fontlight+'bb'} style={[authstyles.inputbox]} placeholder="Confirm your password"/>
                         <Pressable
                         disabled={loading}
                         onPressIn={handleSignUp}
@@ -86,25 +76,25 @@ export default function AuthScreen(){
                                 textAlign:'center',
                                 fontFamily:'SansBold'
                             }}>
-                                Become a Vigilante
+                                That's me
                             </Text>
-                        </Pressable>
+                        </Pressable>   
                     </>
                 }
             </View>
             <View style={{
-                height:height*0.3,
+                height:height*0.4,
                 justifyContent:'flex-end',
                 alignItems:'center'
             }}>
-                <Pressable onPress={()=>{router.replace('/login')}} style={authstyles.button}>
+                <Pressable onPress={()=>{router.replace('/register')}} style={authstyles.button}>
                     <Text style={{
                         color:color.white,
                         fontSize:24,
                         textAlign:'center',
                         fontFamily:'SansBold'
                     }}>
-                        I already have an account
+                        I don't have an account
                     </Text>
                 </Pressable>
             </View>

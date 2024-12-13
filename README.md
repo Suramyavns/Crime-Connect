@@ -9,7 +9,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    ```bash
    npm install
    ```
-2. Create a FirebaseConfig.ts file in root         directory of the project and provide the firebase project configuration
+2. Create a FirebaseConfig.ts file in root directory of the project and provide the firebase project configuration
 
 3. Start the app
 

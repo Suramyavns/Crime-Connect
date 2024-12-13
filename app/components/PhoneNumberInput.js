@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Dimensions, StyleSheet } from 'react-native';
 import PhoneInput from 'react-native-international-phone-number';
-import { color, styles } from '../styles';
+import { color, styles } from '../styles/common';
 
 export default function PhoneNumberInput({handleInputValue,handleSelectedCountry,selectedCountry,inputValue}) {
 

@@ -38,6 +38,6 @@ yarn-error.*
 *.tsbuildinfo
 
 app-example
-FirebaseConfig.ts
+Appwrite.js
 google-services.json
 .env
