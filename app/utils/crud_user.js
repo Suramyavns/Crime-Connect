@@ -2,7 +2,6 @@ import { db,dbID,storage,storageID } from "@/Appwrite";
 import { ID } from "react-native-appwrite";
 
 const avatarBucketId = storageID
-export const default_avatar = require('../../assets/images/default_avatar.png')
 
 
 export const getUserProfile = async(userid) =>{

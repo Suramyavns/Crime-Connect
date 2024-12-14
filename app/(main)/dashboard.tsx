@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable, Image, ImageBackground } from 'react-native';
 import { auth } from '../../Appwrite';
 import { router } from 'expo-router';
-import {downloadImageFromBucket,default_avatar, getUserProfile} from '../utils/crud_user'
+import {downloadImageFromBucket, getUserProfile} from '../utils/crud_user'
 import { color, styles } from '../styles/common';
 import { IUser } from '../interfaces/User';
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import ProfilePicture from '../components/Pfp'
 
 const UserProfile = () => {
     const [userProfile,setUserProfile]=useState<IUser|null>(null)
@@ -26,6 +27,7 @@ const UserProfile = () => {
         }
         //@ts-ignore
         setUserProfile(data);
+        await AsyncStorage.setItem('profile',JSON.stringify(data))
       }
       else{
         router.replace('/(main)/createProfile')
@@ -54,9 +56,7 @@ const UserProfile = () => {
       padding:1,
       backgroundColor:color.bg
     }}>
-      <ImageBackground style={{width:50,height:50}} source={userProfile?.avatar?{uri:userProfile.avatar}:default_avatar}>
-        <Text style={{color:color.white}}>User</Text>
-      </ImageBackground>
+      <ProfilePicture />
       <Pressable style={styles.button} onPress={async()=>{await auth.deleteSession('current');router.replace('/(auth)')}}>
         <Text style={{color:color.white}}>
           Sign Out
