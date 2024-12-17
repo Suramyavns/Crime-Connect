@@ -41,9 +41,10 @@ export default function Index(){
                 :
                 <>
                 <View style={{
-                    height:height*2/8,
+                    height:height*1/8,
+                    paddingVertical:12,
                     alignItems:'center',
-                    justifyContent:'flex-start'
+                    justifyContent:'center'
                 }}>
                     <Text style={{
                         fontFamily:'AudioWide',

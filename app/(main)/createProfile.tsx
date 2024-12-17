@@ -11,7 +11,7 @@ import {ICountry} from 'react-native-international-phone-number'
 import {default_credibility} from '../utils/credibility'
 import * as ImagePicker from 'expo-image-picker'
 import { auth } from "@/Appwrite";
-import { default_avatar } from "../utils/crud_user";
+import { default_avatar } from "../components/Pfp";
 interface Warnings{
     username:boolean,
     phone:boolean,

@@ -17,7 +17,6 @@
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#272727"
       },
-      "googleServicesFile":"./google-services.json",
       "package": "com.suramyavns.crimeconnect"
     },
     "web": {
@@ -42,9 +41,7 @@
           "photosPermission":"The app accesses your photos to create a unique profile"
         }
       ],
-      "expo-font",
-      "@react-native-firebase/app",
-      "@react-native-google-signin/google-signin"
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true

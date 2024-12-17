@@ -20,10 +20,10 @@ export const fontStyle = {
 
 export const styles = StyleSheet.create({
     main:{
-        padding:1,
-        flex:1,
+        padding:12,
+        height:'100%',
         flexDirection:'column',
-        justifyContent:'space-around',
+        justifyContent:'space-between',
         alignItems:'center',
         backgroundColor:color.bg
     },
