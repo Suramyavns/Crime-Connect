@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
         padding:12,
         height:'100%',
         flexDirection:'column',
-        justifyContent:'space-between',
+        justifyContent:'center',
         alignItems:'center',
         backgroundColor:color.bg
     },

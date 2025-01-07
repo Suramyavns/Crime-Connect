@@ -10,7 +10,7 @@ const UserProfile = () => {
     async function fetchUserProfile(id:string){
       const response = await getUserProfile(id);
       if(response){
-        router.replace('/(main)/dashboard')
+        router.replace('/(main)/(tabs)/dashboard')
       }
       else{
         router.replace('/(main)/createProfile')

@@ -39,7 +39,7 @@ export default function Index(){
                 loading?
                 <ActivityIndicator size={150} color={color.blue} />
                 :
-                <>
+                <View style={{height:'100%',justifyContent:'space-between',alignItems:'center'}}>
                 <View style={{
                     height:height*1/8,
                     paddingVertical:12,
@@ -79,7 +79,7 @@ export default function Index(){
                         </Text>
                     </Link>
                 </View>
-                </>
+                </View>
             }
             </View>
         </SafeAreaProvider>
