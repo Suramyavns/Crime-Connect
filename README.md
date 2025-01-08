@@ -20,7 +20,7 @@ If you wish to contribute into building this app, kindly refer to the following 
 Kindly refer to this [figma](https://www.figma.com/design/bWv4uN4rrtVRkOfDLxge8c/CrimeConnect?node-id=0-1&t=QRrIY4MR49WzZzdJ-1) drawing
 if you wish to actively work on the app
 
-In this, I haven't yet completed the UI so feel free to [mail me](sdidwania645@gmail.com) for suggestions.
+In this, I haven't yet completed the UI so feel free to [mail me](mailto::sdidwania645@gmail.com) for suggestions.
 
 # Welcome to your Expo app 👋
 
