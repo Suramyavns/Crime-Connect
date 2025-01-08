@@ -1,3 +1,27 @@
+### Note from the developer
+
+I started working on this project in my software development course but unfortunately my professor who was supervising this project left the college so I am writing this so as to explain my vision and idea with this app to the reader, for I wish to take a break from this app and work on more urgent things. I will be back to this project in the future. I hope you will be able to understand.
+
+I believe to let the common man take responsibility of deliberately solving the crimes happening around him, helping the legal forces like spiderman and batman. But spiderman get updates about criminal activities from NYPD, how would a common man get that?
+
+That's where this app comes into the picture. The victim directly alerts the vigilantes in the area. The vigilantes get an alarm if they accept it they get location of the crime. To avoid predators, a credibility system comes into the picture. This is the prime feature of this app. Whomever accepts the duty call will share their location and details automatically with everybody else who accepted including the victim, so that he/she knows who is coming to help and how far are they.
+
+Other features I imagined were:
+* **Rulebook** : Something which any user can refer to to quickly get a solution to a problem like hit and run cases etc.
+* **Forums** : Forums to discuss about law and people to get human guidance related to any unjustified incident with the person.
+
+
+If you wish to contribute into building this app, kindly refer to the following user story
+
+![Use Case Diagram I made in class](use_case.png)
+
+![User story I thought might explain the project](user_story.png)
+
+Kindly refer to this [figma](https://www.figma.com/design/bWv4uN4rrtVRkOfDLxge8c/CrimeConnect?node-id=0-1&t=QRrIY4MR49WzZzdJ-1) drawing
+if you wish to actively work on the app
+
+In this, I haven't yet completed the UI so feel free to [mail me](sdidwania645@gmail.com) for suggestions.
+
 # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
