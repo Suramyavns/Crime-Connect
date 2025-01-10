@@ -24,6 +24,16 @@ export default function TabLayout(){
                 tabBarIcon:({color})=><Feather size={28} name="home" color={color} />
             }}
             />
+            <Tabs.Screen
+            name="emergency"
+            options={{
+                tabBarIcon:({color})=><Feather size={28} name="info" color={color} />
+            }} />
+            <Tabs.Screen
+            name="rulebook"
+            options={{
+                tabBarIcon:({color})=><Feather size={28} name="book-open" color={color} />
+            }} />
         </Tabs>
     )
 }
