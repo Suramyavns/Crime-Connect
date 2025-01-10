@@ -14,6 +14,7 @@ export default function TabLayout(){
                 height:60,
                 backgroundColor: '#474747',
             },
+            tabBarHideOnKeyboard:true,
             tabBarItemStyle:{
                 paddingVertical:10
             }

@@ -67,11 +67,6 @@ const UserProfile = () => {
         :
         <View style={{height:'100%',justifyContent:'space-between',alignItems:'center'}}>
           <HeaderComponent title='Dashboard' />
-          <Pressable style={styles.button} onPress={async()=>{setLoading(true);await auth.deleteSession('current');await AsyncStorage.clear();router.replace('/(auth)');setLoading(false)}}>
-            <Text style={{color:color.white,fontFamily:'SansBold',fontSize:24,textAlign:'center'}}>
-              Sign Out
-            </Text>
-          </Pressable>
         </View>
       }
     </View>
