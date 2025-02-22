@@ -46,6 +46,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
       export const auth = new Account(client)
       export const db = new Databases(client);
       export const storage = new Storage(client);
+      export const HF_NLP_TOKEN = <your-hugging-face-token>
    ```
 
 3. Start the app

@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import HeaderComponent from '../../components/Header';
 
 
-const UserProfile = () => {
+const Dashboard = () => {
     const [userProfile,setUserProfile]=useState<IUser|null>(null)
     const [loading,setLoading] = useState(false);
     async function fetchUserProfile(id:string){
@@ -73,4 +73,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default Dashboard;
