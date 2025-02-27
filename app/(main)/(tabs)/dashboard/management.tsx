@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Pressable, Image, ImageBackground, Dimensions, ActivityIndicator } from 'react-native';
-import { auth } from '../../Appwrite';
+import { auth } from '../../../../Appwrite';
 import { router } from 'expo-router';
-import {downloadImageFromBucket, getUserProfile} from '../utils/crud_user'
-import { color, styles } from '../styles/common';
-import { IUser } from '../interfaces/User';
+import {downloadImageFromBucket, getUserProfile} from '../../../utils/crud_user'
+import { color, styles } from '../../../styles/common';
+import { IUser } from '../../../interfaces/User';
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import HeaderComponent from '../components/Header';
+import HeaderComponent from '../../../components/Header';
 
 
 const UserProfile = () => {

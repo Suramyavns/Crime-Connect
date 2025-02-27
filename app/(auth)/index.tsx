@@ -39,46 +39,45 @@ export default function Index(){
                 loading?
                 <ActivityIndicator size={150} color={color.blue} />
                 :
-                <View style={{height:'100%',justifyContent:'space-between',alignItems:'center'}}>
-                <View style={{
-                    height:height*1/8,
-                    paddingVertical:12,
-                    alignItems:'center',
-                    justifyContent:'center'
-                }}>
-                    <Text style={{
-                        fontFamily:'AudioWide',
-                        fontSize:56,
-                        color:color.white
-                    }}>
-                        Crime Connect
-                    </Text>
-                    <Text style={{
-                        fontSize:20,
-                        fontFamily:'AudioWide',
-                        color:color.white
-                    }}>
-                        Become responsible with your powers
-                    </Text>
-                </View>
-                <View style={{height:height*4/8,justifyContent:'flex-end'}}>
-                    <Link replace href={'/register'} style={{
-                        backgroundColor:color.blue,
-                        minWidth:'85%',
-                        textAlign:'center',
-                        padding:8,
-                        borderRadius:12
+                <View style={{flex:1,flexDirection:'column',justifyContent:'space-between',alignItems:'center'}}>
+                    <View style={{
+                        flex:1,
+                        alignItems:'center',
+                        justifyContent:'flex-start'
                     }}>
                         <Text style={{
-                            textAlignVertical:'center',
-                            color:color.white,
-                            fontSize:24,
-                            fontFamily:'SansBold'
+                            fontFamily:'AudioWide',
+                            fontSize:56,
+                            color:color.white
                         }}>
-                            Save your city
+                            Crime Connect
                         </Text>
-                    </Link>
-                </View>
+                        <Text style={{
+                            fontSize:20,
+                            fontFamily:'AudioWide',
+                            color:color.white
+                        }}>
+                            Become responsible with your powers
+                        </Text>
+                    </View>
+                    <View style={{flex:1,justifyContent:'flex-end'}}>
+                        <Link replace href={'/register'} style={{
+                            backgroundColor:color.blue,
+                            minWidth:'85%',
+                            textAlign:'center',
+                            padding:8,
+                            borderRadius:12
+                        }}>
+                            <Text style={{
+                                textAlignVertical:'center',
+                                color:color.white,
+                                fontSize:24,
+                                fontFamily:'SansBold'
+                            }}>
+                                Save your city
+                            </Text>
+                        </Link>
+                    </View>
                 </View>
             }
             </View>

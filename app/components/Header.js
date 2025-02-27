@@ -9,7 +9,7 @@ export default function HeaderComponent({title}){
     const [fontsloaded]=useFonts(fontStyle);
     return(
         <View style={headerStyle.heading}>
-            <Link href={'/(main)/management'}>
+            <Link href={'/(main)/(tabs)/dashboard/management'}>
                 <ProfilePicture />
             </Link>
             <Text style={{

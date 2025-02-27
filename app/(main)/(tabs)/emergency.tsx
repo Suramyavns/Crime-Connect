@@ -17,7 +17,7 @@ export default function SOSPage(){
         }}>
             <HeaderComponent title={"Emergency"} />
             <View style={{
-                height:'80%',
+                flex:1,
                 justifyContent:'center',
                 alignItems:'center',
             }}>

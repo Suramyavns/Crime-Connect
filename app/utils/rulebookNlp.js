@@ -1,17 +1,19 @@
-import { HF_NLP_TOKEN } from "@/Appwrite";
+import { GEMINI_API_TOKEN } from "@/Appwrite";
 
 export const getRule = async (prompt) => {
-    const response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1", {
+    const input = `briefly within 200 words help me in this situation according to Indian Law ${prompt}`
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_TOKEN}`, {
         method: "POST",
         headers: {
-            "Authorization": `Bearer ${HF_NLP_TOKEN}`,
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            inputs: `help me in this situation according to Indian Law ${prompt}`,
-            options: { max_tokens: 300 }
+            contents: [{
+                parts:[{text: input}]
+            }]
         })
     });
     const data = await response.json();
-    return data[0]['generated_text']
+    output = data['candidates'][0].content.parts[0].text
+    return output;
 }
