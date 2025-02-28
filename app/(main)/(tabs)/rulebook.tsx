@@ -3,8 +3,9 @@ import { color, fontStyle, styles } from "@/app/styles/common";
 import { Feather, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Dimensions, Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { getRule } from '../../utils/rulebookNlp'
+import Markdown from 'react-native-markdown-display'
 
 export default function Rulebook(){
 
@@ -83,25 +84,31 @@ export default function Rulebook(){
                                 What can I help you with?
                             </Text>
                             :
-                            <ScrollView>
+                            <ScrollView style={{
+                                width:width*.99
+                            }}>
                                 {chat.map((text,index)=>{
                                     return(
                                         <View key={index} style={{
                                             flexDirection:'row',
                                             justifyContent:index%2==0?'flex-end':'flex-start',
                                             margin:8,
-                                            width:width*.9
+                                            paddingHorizontal:8,
+                                            width:'100%'
                                         }}>
-                                            <Text style={{
-                                                color:'white',
-                                                fontSize:18,
-                                                borderRadius:18,
-                                                padding:12,
-                                                backgroundColor:'#333333',
+                                            <View style={{
                                                 width:index%2==0?'auto':'80%'
                                             }}>
-                                                {text}
-                                            </Text>
+                                                <ScrollView style={{
+                                                    borderRadius:18,
+                                                    padding:12,
+                                                    backgroundColor:'#333333',
+                                                }}>
+                                                    <Markdown style={markdownStyles}>
+                                                        {text}
+                                                    </Markdown>
+                                                </ScrollView>
+                                            </View>
                                         </View>
                                     )
                                 })}
@@ -139,3 +146,93 @@ export default function Rulebook(){
         </View>
     )
 }
+
+const markdownStyles = StyleSheet.create({
+    // Headings
+    heading1: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: '#ffffff', // White
+      marginBottom: 8,
+    },
+    heading2: {
+      fontSize: 24,
+      fontWeight: 'bold',
+      color: '#ffffff',
+      marginBottom: 6,
+    },
+    heading3: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: '#ffffff',
+      marginBottom: 4,
+    },
+  
+    // Text
+    text: {
+      color: '#e0e0e0', // Light grey for readability
+      fontSize: 16,
+      lineHeight: 24,
+    },
+  
+    // Bold
+    strong: {
+      fontWeight: 'bold',
+      color: '#ffffff',
+    },
+  
+    // Italic
+    em: {
+      fontStyle: 'italic',
+      color: '#e0e0e0',
+    },
+  
+    // Links
+    link: {
+      color: '#4da6ff', // Light blue for visibility
+      textDecorationLine: 'underline',
+    },
+  
+    // Blockquotes
+    blockquote: {
+      backgroundColor: '#333333', // Darker background for contrast
+      padding: 8,
+      marginVertical: 8,
+      borderLeftWidth: 4,
+      borderLeftColor: '#4da6ff',
+    },
+  
+    // Code blocks
+    code_block: {
+      backgroundColor: '#222222',
+      padding: 8,
+      borderRadius: 4,
+    },
+    code_inline: {
+      backgroundColor: '#333333',
+      color: '#e0e0e0',
+      paddingHorizontal: 4,
+      paddingVertical: 2,
+      borderRadius: 4,
+      fontFamily: 'monospace',
+    },
+  
+    // Lists
+    bullet_list: {
+      color: '#e0e0e0',
+    },
+    ordered_list: {
+      color: '#e0e0e0',
+    },
+    list_item: {
+      color: '#e0e0e0',
+      marginVertical: 4,
+    },
+  
+    // Horizontal rule
+    hr: {
+      borderBottomWidth: 1,
+      borderBottomColor: '#555555',
+      marginVertical: 12,
+    },
+  });
