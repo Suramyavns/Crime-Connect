@@ -7,6 +7,7 @@ import { color, styles } from '../../../styles/common';
 import { IUser } from '../../../interfaces/User';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import HeaderComponent from '../../../components/Header';
+import { getCredibilityRank } from '@/app/utils/credibility';
 
 const UserProfile = () => {
     const [userProfile,setUserProfile]=useState<IUser|null>(null)
@@ -153,7 +154,7 @@ const UserProfile = () => {
               fontWeight:'bold',
               textAlign:'left'
             }}>
-              {userProfile?.credibility}
+              {getCredibilityRank(userProfile?.credibility).toLocaleUpperCase()}
             </Text>
 
           </View>

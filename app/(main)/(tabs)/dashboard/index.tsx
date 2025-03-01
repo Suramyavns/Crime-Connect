@@ -44,6 +44,11 @@ const Dashboard = () => {
       fetchUserProfile(user.$id)
     }
 
+    const checkPost = async(id:string) => {
+      console.log(id);
+      
+    }
+
     useEffect(()=>{
         setLoading(true);
         try{

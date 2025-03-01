@@ -5,9 +5,11 @@ import { color, styles } from "../styles/common";
 import { Entypo } from "@expo/vector-icons";
 import { addLike, getPost, hasLikedPost, updatePost } from "../utils/crud_posts";
 import { auth, db, dbID } from "@/Appwrite";
-import { ID } from "react-native-appwrite";
+import { useRouter } from "expo-router";
 
 export default function CardPost(id){
+
+    const router = useRouter();
     const [postid,setPostId]=useState(null);
     const [photoUrl,setPhotoUrl]=useState();
     const [username,setUsername]=useState();
@@ -58,6 +60,10 @@ export default function CardPost(id){
         setLoading(false)
     }
 
+    const handleView = async(id)=>{
+        router.push(`/(main)/(tabs)/dashboard/${id}`)
+    }
+
     useEffect(()=>{
         fetchPostData()
     },[])
@@ -68,10 +74,10 @@ export default function CardPost(id){
             aspectRatio:1.8,
             padding:12,
             borderWidth:1,
-            backgroundColor:'#171717',
             borderRadius:18,
             gap:8,
-            justifyContent:'space-between'
+            borderColor:color.white,
+            justifyContent:loading?'center':'space-between'
         }}>
             {
                 loading?
@@ -104,7 +110,7 @@ export default function CardPost(id){
                             <Entypo size={24} color={userReactionToPost===-1?color.blue:color.white} name="thumbs-down" />
                         </Pressable>
                     </View>
-                    <Pressable style={{
+                    <Pressable onPress={()=>{handleView(postid)}} style={{
                             backgroundColor:color.blue,
                             padding:8,
                             borderRadius:8,
