@@ -37,6 +37,43 @@ export async function getPost(documentId) {
 }
 
 /**
+ * Checks whether the current user has liked a post.
+ * @param {string} userid - The ID of the current user.
+ * @param {string} postid - The ID of the post.
+ * @example
+ * db.listDocuments('db123', 'col456', [Query.equal('postid',postid),Query.equal('userid',userid)]);
+ */
+export async function hasLikedPost(userid,postid) {
+    try {
+        const res = await db.listDocuments(dbID,'likers',[Query.equal('postid',postid),Query.equal('userid',userid)])
+        return res
+    } catch (error) {
+        console.error('Error fetching document:', error);
+        throw error;
+    }
+}
+
+/**
+ * Checks whether the current user has liked a post.
+ * @param {string} userid - The ID of the current user.
+ * @param {string} postid - The ID of the post.
+ * @param {integer} reaction - The reaction on the post
+ * @example
+ * db.listDocuments('db123', 'col456', [Query.equal('postid',postid),Query.equal('userid',userid)]);
+ */
+export async function addLike(postid,userid,reaction) {
+    try {
+        const res = await db.createDocument(dbID,'likers',ID.unique(),{postid:postid,userid:userid,reaction:reaction})
+        return res
+    } catch (error) {
+        console.error('Error fetching document:', error);
+        throw error;
+    }
+}
+
+
+
+/**
  * Updates an existing document.
  * @param {string} databaseId - The ID of the database.
  * @param {string} collectionId - The ID of the collection.

@@ -14,7 +14,7 @@ import CardPost from '../../../components/CardPost'
 
 const Dashboard = () => {
     const [userProfile,setUserProfile]=useState<IUser|null>(null)
-    const [feedPosts,setFeedPosts]=useState<IPost[]|null>(null);
+    const [feedPosts,setFeedPosts]=useState([]);
     const [loading,setLoading] = useState(false);
     async function fetchUserProfile(id:string){
       const response = await getUserProfile(id);
@@ -60,12 +60,8 @@ const Dashboard = () => {
     const getFeed = async()=>{
       const posts = await listPosts();
       const feedData = posts.documents.map((doc)=>{
-        const data:IPost = {
-          userid:doc.userid,
-          title:doc.title,
-          body:doc.body,
-          created_at:doc.$updatedAt,
-          likes:doc.likes
+        const data = {
+          postid:doc.$id
         }
         return data
       })      
@@ -121,7 +117,8 @@ const Dashboard = () => {
                 <>
                   {
                     feedPosts.map((post,index)=>{
-                      return <CardPost key={index} postdata={post} />
+                      //@ts-ignore
+                      return <CardPost key={index} postdata={post.postid} />
                     })
                   }
                 </>
