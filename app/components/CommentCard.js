@@ -21,6 +21,7 @@ export default function CardComment({commentid}){
         const commentData = await getComment(commentid);
         fetchUserWithID(commentData.userid)
         setData(commentData);
+        setLoading(false)
     }
     useEffect(()=>{
         fetchCommentData();
