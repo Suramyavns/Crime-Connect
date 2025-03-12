@@ -48,13 +48,13 @@ export default function PostView() {
   }
 
   async function uploadComment(){
+    setComment('')
+    setLoading(true);
     await createComment({
         userid:(await auth.get()).$id,
         parentpostid:id,
         content:comment
     })
-    setComment('')
-    setLoading(true);
     fetchCommentsWithId(id);
     setLoading(false);
   }
